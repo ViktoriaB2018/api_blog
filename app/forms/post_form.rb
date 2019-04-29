@@ -2,7 +2,7 @@ class PostForm < Reform::Form
   include Composition
 
   property :title, on: :post
-  property :title, on: :body
+  property :body,  on: :post
   property :username, on: :user
   property :ip, on: :user_ip
 
@@ -10,9 +10,9 @@ class PostForm < Reform::Form
 
   def initialize(options = {})
     super(
-      post:     Post.new(title: options[:title], body: options[:body]),
-      user:     User.find_or_initialize_by(username: options[:username]),
-      user_ip:  UserIp.find_or_initialize_by(ip: options[:ip])
+        post:    Post.new(title: options[:title], body: options[:body]),
+        user:    User.find_or_initialize_by(username: options[:username]),
+        user_ip: UserIp.find_or_initialize_by(ip: options[:ip])
     )
   end
 
@@ -35,10 +35,10 @@ class PostForm < Reform::Form
       user_ip.save!
       user.save!
 
-      post.assing_attributes(
-        user: user,
-        user_ip: user_ip
-      )
+      post.assign_attributes(
+          user: user,
+          user_ip: user_ip,
+          )
 
       post.save!
     end
